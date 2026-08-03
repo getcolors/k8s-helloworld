@@ -1,0 +1,25 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: hello-world
+  namespace: hello-world
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt
+    external-dns.alpha.kubernetes.io/hostname: hello.bigconfig.online
+spec:
+  ingressClassName: nginx
+  tls:
+    - hosts:
+        - hello.bigconfig.online
+      secretName: hello-world-tls
+  rules:
+    - host: hello.bigconfig.online
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: hello-world
+                port:
+                  name: http

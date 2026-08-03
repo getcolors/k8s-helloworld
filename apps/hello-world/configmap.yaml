@@ -1,0 +1,19 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: hello-world-nginx
+  namespace: hello-world
+data:
+  default.conf: |
+    server {
+      listen 8080;
+      server_name _;
+      location = /healthz {
+        default_type text/plain;
+        return 200 "ok\n";
+      }
+      location / {
+        default_type text/plain;
+        return 200 "Hello from kubeadm on DigitalOcean\n";
+      }
+    }
