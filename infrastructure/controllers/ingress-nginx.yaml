@@ -41,6 +41,11 @@ spec:
         annotations:
           service.beta.kubernetes.io/do-loadbalancer-name: k8s-digitalocean-ingress
           service.beta.kubernetes.io/do-loadbalancer-protocol: tcp
+          # Connection-terminating REGIONAL load balancers forward to Kubernetes
+          # NodePorts. REGIONAL_NETWORK forwards to service ports and requires a
+          # host-network dataplane that this kube-proxy cluster does not use.
+          service.beta.kubernetes.io/do-loadbalancer-type: REGIONAL
+          service.beta.kubernetes.io/do-loadbalancer-network-stack: IPV4
       resources:
         requests:
           cpu: 100m
