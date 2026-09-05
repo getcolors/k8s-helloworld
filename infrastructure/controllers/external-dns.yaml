@@ -36,7 +36,12 @@ spec:
       name: cloudflare
     sources:
       - ingress
-    policy: upsert-only
+    # sync, not upsert-only: the k8s package's delete prunes the application
+    # and waits for this controller to withdraw its records before the
+    # cluster goes, so the application host does not outlive it pointing at
+    # a load balancer that no longer exists. The txt registry below scopes
+    # what sync may delete to records this owner id created.
+    policy: sync
     registry: txt
     txtOwnerId: k8s-digitalocean
     domainFilters:
