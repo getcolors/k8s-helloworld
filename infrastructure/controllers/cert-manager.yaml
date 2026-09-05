@@ -34,6 +34,14 @@ spec:
   values:
     crds:
       enabled: true
+    # HTTP-01 self-checks resolve the host through public resolvers rather
+    # than the node's chain. cert-manager asks for the name before
+    # external-dns has created it, and the negative answer is cached by the
+    # DigitalOcean VPC resolver for the zone's SOA minimum (Cloudflare: 1800s);
+    # a fresh cluster then waits half an hour for a certificate it could have
+    # had in a minute. Seen live on 2026-09-05 with an empty zone.
+    extraArgs:
+      - --acme-http01-solver-nameservers=1.1.1.1:53,1.0.0.1:53
     prometheus:
       enabled: false
     resources:
